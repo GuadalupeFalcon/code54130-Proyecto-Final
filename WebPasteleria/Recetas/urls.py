@@ -1,10 +1,9 @@
+
 from django.contrib import admin
 from django.urls import path
-from django.http import HttpResponse
-
-def mi_vista_recetas(request):
-    return HttpResponse("<h1>Recetas!</h1>")
+from .views import recetas_view, search_view
 
 urlpatterns = [
-    path('', mi_vista_recetas), 
-]
+    path('', recetas_view), 
+    path("buscar/<ingrediente>", search_view), 
+] 
