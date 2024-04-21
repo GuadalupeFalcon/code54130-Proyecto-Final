@@ -11,3 +11,11 @@ def list_view(request):
     pedidos = Pedido.objects.all()
     contexto_dict = {"pedidos": pedidos}
     return render(request, "pedidos/list.html", contexto_dict)
+
+#CRUD: PRODUCTOS
+
+#LIST
+#CREATE
+#DETAIL
+#UPDATE
+#DELETE

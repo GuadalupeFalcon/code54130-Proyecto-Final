@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 
@@ -16,7 +18,7 @@ class Producto(models.Model):
     tipo = models.CharField(
             max_length=2,
             choices=Tipo.choices,
-            default=Tipo.PRODUCTO,
+            default=Tipo.CONTIENE_TRIGO,
     )
 
     
@@ -27,7 +29,7 @@ class Producto(models.Model):
 
 
 class Pedido(models.Model):
-    nombre_de_cliente = models.CharField(max_length=50)
+    nombre_de_usuario = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="usuarios")
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name="pedidos")
     fecha = models.DateField(default=timezone.now)
     hora_inicio = models.TimeField(default=timezone.now)
@@ -35,4 +37,4 @@ class Pedido(models.Model):
     descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nombre_de_cliente} - {self.producto.nombre} - {self.fecha}"
+        return f"{self.nombre_de_usuario} - {self.producto.nombre} - {self.fecha}"
