@@ -32,9 +32,10 @@ class Pedido(models.Model):
     nombre_de_usuario = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name="usuarios")
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE, related_name="pedidos")
     fecha = models.DateField(default=timezone.now)
-    hora_inicio = models.TimeField(default=timezone.now)
+    hora = models.TimeField(default=timezone.now)
 
     descripcion = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.nombre_de_usuario} - {self.producto.nombre} - {self.fecha}"
+

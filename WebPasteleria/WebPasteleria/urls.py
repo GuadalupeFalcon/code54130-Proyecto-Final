@@ -17,7 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 
+from django.http import HttpResponse
+
+
+def mi_view(request):
+    return HttpResponse("<h1>Lupe Mesas Dulces, Bienvenidos a nuestra Web</h1>")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", mi_view),
     path("pedidos/", include("pedidos.urls")),
 ]
