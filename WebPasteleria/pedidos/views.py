@@ -123,7 +123,7 @@ from django.http import HttpResponse
 
 def producto_list_view(request):
     todos_los_productos = Producto.objects.all()
-    contexto = {"SANTIAGOMOTORIZADO": todos_los_productos}
+    contexto = {"PRODUCTOS": todos_los_productos}
     return render(request, "pedidos/producto-list.html", contexto)
 
 def delete_producto_view(request, producto_id):
@@ -167,7 +167,7 @@ def search_producto_view(request):
         if form.is_valid():
             nombre= form.cleaned_data["nombre"]
             producto = Producto.objects.filter(nombre=nombre).all()
-            contexto = {"SANTIAGOMOTORIZADO": producto}
+            contexto = {"PRODUCTOS": producto}
             return render(request, "pedidos/producto-list.html", contexto)
         
 
@@ -198,3 +198,46 @@ def create_pedido_with_form_view(request):
             )
             nuevo_pedido.save()
             return detail_pedidos_view(request, nuevo_pedido.id)
+        
+
+from django.urls import reverse_lazy
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
+
+
+class ProductoListView(ListView):
+    model = Producto
+    template_name = "pedidos/vbc/producto-list.html"
+    context_object_name = "PRODUCTOS"
+
+
+class ProductoDetailView(DetailView):
+    model = Producto
+    template_name = "pedidos/vbc/detail-producto.html"
+    context_object_name = "producto"
+
+
+class ProductoCreateView(CreateView):
+    model = Producto
+    template_name = "pedidos/vbc/form-create-producto.html"
+    fields = ["nombre", "disponible", "rendimiento", "tipo"]
+    success_url = reverse_lazy("vbc_producto_list")
+
+
+class ProductoUpdateView(UpdateView):
+    model = Producto
+    template_name = "pedidos/vbc/form-create-producto.html"
+    fields = ["nombre", "disponible", "rendimiento", "tipo"]
+    context_object_name = "producto"
+    success_url = reverse_lazy("vbc_producto_list")
+
+
+class ProductoDeleteView(DeleteView):
+    model = Producto
+    template_name = "pedidos/vbc/producto_confirm_delete.html"
+    success_url = reverse_lazy("vbc_producto_list")

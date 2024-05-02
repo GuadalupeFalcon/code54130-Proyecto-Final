@@ -12,7 +12,13 @@ from .views import (
     create_pedido_with_form_view,
     delete_producto_view,
     producto_update_view,
-    search_producto_view
+    search_producto_view,
+    #VBC
+    ProductoListView,
+    ProductoDetailView,
+    ProductoCreateView,
+    ProductoUpdateView,
+    ProductoDeleteView,
 )
 
 urlpatterns = [
@@ -29,4 +35,10 @@ urlpatterns = [
     path("producto/delete/<producto_id>", delete_producto_view, name="producto-delete"),
     path("producto/update/<producto_id>", producto_update_view, name="producto-update"),
     path("producto/buscar/", search_producto_view, name="producto-search"),
+       # Vistas basadas en clases "VBC"
+    path("vbc/list", ProductoListView.as_view(), name="vbc_producto_list"),
+    path("vbc/create/", ProductoCreateView.as_view(), name="vbc_producto_create"),
+    path("vbc/<int:pk>/detail", ProductoDetailView.as_view(), name="vbc_producto_detail"),
+    path("sala/vbc/<int:pk>/update/", ProductoUpdateView.as_view(), name="vbc_producto_update"),
+    path("sala/vbc/<int:pk>/delete/", ProductoDeleteView.as_view(), name="vbc_producto_delete"),
 ]

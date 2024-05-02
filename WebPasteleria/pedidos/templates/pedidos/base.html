@@ -40,6 +40,15 @@
                         <a class="dropdown-item" href="{% url 'producto-search' %}">Buscar Producto</a>
                     </div>
                 </li>
+                  <!-- Dropdown for Sala (VBC)-->
+                  <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkProducto" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Producto (VBC)
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkProducto">
+                        <a class="dropdown-item" href="{% url 'vbc_producto_list' %}">Todos los Productos</a>
+                        <a class="dropdown-item" href="{% url 'vbc_producto_create' %}">Crear Producto</a>
+                    </div>
                 </li>
             </ul>
         </div>
