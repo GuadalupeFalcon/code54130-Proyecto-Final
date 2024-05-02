@@ -28,6 +28,7 @@ def create_view(request, nombre_de_usuario, producto):
     pedido = Pedido.objects.create(nombre_de_usuario=nombre_de_usuario, producto=producto)
     return HttpResponse(f"resultado: {pedido}")
 
+
 def detail_pedidos_view(request, pedido_id):
     pedido = Pedido.objects.get(id=pedido_id)
     context_dict = {"pedido": pedido}
@@ -125,10 +126,6 @@ def producto_list_view(request):
     contexto = {"SANTIAGOMOTORIZADO": todos_los_productos}
     return render(request, "pedidos/producto-list.html", contexto)
 
-def create_pedido_with_form_view(request):
-    contexto = {"create_pedido_form": PedidoCreateForm()}
-    return render(request, "pedidos/form-create-pedido.html", contexto)
-
 def delete_producto_view(request, producto_id):
     producto_a_borrar = Producto.objects.filter(id=producto_id).first()
     producto_a_borrar.delete()
@@ -162,13 +159,42 @@ def producto_update_view(request, producto_id):
         
 def search_producto_view(request):
     if request.method == "GET":
-        form = ProductoSearchForm()
-        return render(request, "pedidos/form-producto-search.html", context={"search_producto_form": form})
+        contexto={"search_producto_form": ProductoSearchForm()}
+        return render (request, "pedidos/form-producto-search.html" , contexto)
     elif request.method == "POST":
         #  devolverle a "chrome" la lista de reservas encontrada o avisar que no se encontró nada
         form = ProductoSearchForm(request.POST)
         if form.is_valid():
             nombre= form.cleaned_data["nombre"]
-            producto_buscado = Producto.objects.filter(nombre=nombre).all()
-            contexto_dict = {"search_producto_form": producto_buscado}
-            return render(request, "pedidos/producto-list.html", contexto_dict)
+            producto = Producto.objects.filter(nombre=nombre).all()
+            contexto = {"SANTIAGOMOTORIZADO": producto}
+            return render(request, "pedidos/producto-list.html", contexto)
+        
+
+def create_pedido_with_form_view(request):
+    if request.method == "GET":
+        contexto = {"create_pedido_form": PedidoCreateForm()}
+        return render(request, "pedidos/form-create-pedido.html", contexto)
+    elif request.method == "POST":
+        form = PedidoCreateForm(request.POST)
+        if form.is_valid():
+            # Obtener los datos del formulario
+            nombre_de_usuario = form.cleaned_data["nombre_de_usuario"]
+            producto = form.cleaned_data["producto"]
+            fecha = form.cleaned_data["fecha"]
+            hora = form.cleaned_data["hora"]
+            descripcion = form.cleaned_data["descripcion"]
+            # Obtener el usuario correspondiente al nombre de usuario ingresado
+#            usuario = User.objects.get(username=nombre_de_usuario)
+            # Obtener el producto seleccionado
+#            producto = Producto.objects.get(id=producto_id)
+            # Crear un nuevo pedido
+            nuevo_pedido = Pedido(
+                nombre_de_usuario=nombre_de_usuario,
+                producto_id=producto.id,
+                fecha=fecha,
+                hora=hora,
+                descripcion=descripcion,
+            )
+            nuevo_pedido.save()
+            return detail_pedidos_view(request, nuevo_pedido.id)
