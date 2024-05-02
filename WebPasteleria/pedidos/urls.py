@@ -13,12 +13,18 @@ from .views import (
     delete_producto_view,
     producto_update_view,
     search_producto_view,
-    #VBC
+    #VBC producto
     ProductoListView,
     ProductoDetailView,
     ProductoCreateView,
     ProductoUpdateView,
     ProductoDeleteView,
+    #VBC packaging
+    PackagingListView,
+    PackagingDetailView,
+    PackagingCreateView,
+    PackagingUpdateView,
+    PackagingDeleteView,
 )
 
 urlpatterns = [
@@ -35,10 +41,16 @@ urlpatterns = [
     path("producto/delete/<producto_id>", delete_producto_view, name="producto-delete"),
     path("producto/update/<producto_id>", producto_update_view, name="producto-update"),
     path("producto/buscar/", search_producto_view, name="producto-search"),
-       # Vistas basadas en clases "VBC"
-    path("vbc/list", ProductoListView.as_view(), name="vbc_producto_list"),
-    path("vbc/create/", ProductoCreateView.as_view(), name="vbc_producto_create"),
-    path("vbc/<int:pk>/detail", ProductoDetailView.as_view(), name="vbc_producto_detail"),
-    path("sala/vbc/<int:pk>/update/", ProductoUpdateView.as_view(), name="vbc_producto_update"),
-    path("sala/vbc/<int:pk>/delete/", ProductoDeleteView.as_view(), name="vbc_producto_delete"),
+       # Vistas basadas en clases "VBC" Producto
+    path("producto/vbc/list", ProductoListView.as_view(), name="vbc_producto_list"),
+    path("producto/vbc/create/", ProductoCreateView.as_view(), name="vbc_producto_create"),
+    path("producto/vbc/<int:pk>/detail", ProductoDetailView.as_view(), name="vbc_producto_detail"),
+    path("producto/vbc/<int:pk>/update/", ProductoUpdateView.as_view(), name="vbc_producto_update"),
+    path("producto/vbc/<int:pk>/delete/", ProductoDeleteView.as_view(), name="vbc_producto_delete"),
+           # Vistas basadas en clases "VBC" Packaging
+    path("packaging/vbc/packaging-list", PackagingListView.as_view(), name="vbc_packaging_list"),
+    path("packaging/vbc/create/", PackagingCreateView.as_view(), name="vbc_packaging_create"),
+    path("packaging/vbc/<int:pk>/detail", PackagingDetailView.as_view(), name="vbc_packaging_detail"),
+    path("packaging/vbc/<int:pk>/update/", PackagingUpdateView.as_view(), name="vbc_packaging_update"),
+    path("packaging/vbc/<int:pk>/delete/", PackagingDeleteView.as_view(), name="vbc_packaging_delete"),
 ]

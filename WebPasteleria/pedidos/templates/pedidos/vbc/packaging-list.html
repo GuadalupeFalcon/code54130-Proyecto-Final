@@ -1,0 +1,49 @@
+{% extends 'pedidos/base.html' %}
+
+{% block title %} Listado de Packaging {% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="mb-0">Packagings</h2>
+            <a href="{% url 'vbc_packaging_create' %}" class="btn btn-success">Crear Packaging</a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Disponible</th>
+                    <th scope="col">Etiqueta</th>
+                    <th scope="col">Descripcion</th>
+                    
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if PACKAGING %}
+                {% for packaging in PACKAGING %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ packaging.nombre }}</td>
+                    <td>{{ packaging.disponible }}</td>
+                    <td>{{ packaging.etiqueta }}</td>
+                    <td>{{ packaging.descripcion }}</td>
+                    <td>
+                        <a href="{% url 'vbc_packaging_update' packaging.id %}" class="btn btn-primary btn-sm">Editar</a>
+                        <a href="{% url 'vbc_packaging_delete' packaging.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                        <a href="{% url 'vbc_packaging_detail' packaging.id %}" class="btn btn-primary btn-sm">Ver</a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7">No hay Packaging disponibles.</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

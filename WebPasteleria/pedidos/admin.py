@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Pedido , Producto
+from .models import Pedido , Producto , Packaging
 
 # Register your models here.
 
 admin.site.register (Pedido)
 admin.site.register (Producto)
+admin.site.register (Packaging)

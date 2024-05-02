@@ -1,0 +1,56 @@
+{% extends 'pedidos/base.html' %}
+
+{% block title %}Detalle del Packaging{% endblock %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        Detalle del Packaging
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ packaging.nombre }}</h5>
+                        {% if packaging.disponible %}
+                        <h6 class="card-subtitle mb-2">Disponibilidad: Disponible</h6>
+                        {% else %}
+                        <h6 class="card-subtitle mb-2">Disponibilidad: No Disponible</h6>
+                        {% endif %}
+                        <p class="card-text">Descripcion: {{ packaging.descripcion }}</p>
+                        <p class="card-text">Tipo: {{ packaging.etiqueta | default:"No proporcionado" }}</p>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h3>Pedidos para este Packaging</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre de Usuario</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Hora</th>
+                                <th scope="col">Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pedido in producto.pedidos.all %}
+                            <tr>
+                                <td>{{ pedido.nombre_de_usuario }}</td>
+                                <td>{{ pedido.fecha | date:"d/m/Y" }}</td>
+                                <td>{{ pedido.hora | date:"H:i" }}</td>
+                                <td>{{ pedido.descripcion | default:"No proporcionado" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5">No hay pedidos para este producto.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect
-from .models import Pedido, Producto
+from .models import Pedido, Producto , Packaging
 from django.http import HttpResponse
 from .forms import PedidoSearchForm , ProductoCreateForm , PedidoCreateForm , ProductoSearchForm
 from django.contrib.auth.models import User
@@ -149,11 +149,11 @@ def producto_update_view(request, producto_id):
             nombre = form.cleaned_data["nombre"]
             disponible = form.cleaned_data["disponible"]
             rendimiento = form.cleaned_data["rendimiento"]
-            descripcion = form.cleaned_data["tipo"]
+            tipo = form.cleaned_data["tipo"]
             producto_a_editar.nombre = nombre
             producto_a_editar.disponible = disponible
             producto_a_editar.rendimiento = rendimiento
-            producto_a_editar.descripcion = descripcion
+            producto_a_editar.tipo = tipo
             producto_a_editar.save()
             return redirect("producto-detail", producto_a_editar.id)
         
@@ -241,3 +241,38 @@ class ProductoDeleteView(DeleteView):
     model = Producto
     template_name = "pedidos/vbc/producto_confirm_delete.html"
     success_url = reverse_lazy("vbc_producto_list")
+
+
+#-------------------------------------   
+
+class PackagingListView(ListView):
+    model = Packaging
+    template_name = "pedidos/vbc/packaging-list.html"
+    context_object_name = "PACKAGING"
+
+
+class PackagingDetailView(DetailView):
+    model = Packaging
+    template_name = "pedidos/vbc/detail-packaging.html"
+    context_object_name = "producto"
+
+
+class PackagingCreateView(CreateView):
+    model = Packaging
+    template_name = "pedidos/vbc/form-create-packaging.html"
+    fields = ["nombre", "disponible", "descripcion", "etiqueta"]
+    success_url = reverse_lazy("vbc_packaging_list")
+
+
+class PackagingUpdateView(UpdateView):
+    model = Packaging
+    template_name = "pedidos/vbc/form-create-packaging.html"
+    fields = ["nombre", "disponible", "descripcion", "etiqueta"]
+    context_object_name = "form"
+    success_url = reverse_lazy("vbc_packaging_list")
+
+
+class PackagingDeleteView(DeleteView):
+    model = Packaging
+    template_name = "pedidos/vbc/packaging_confirm_delete.html"
+    success_url = reverse_lazy("vbc_packaging_list")
