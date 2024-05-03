@@ -239,6 +239,7 @@ def create_pedido_with_form_view(request):
         
 #Producto VBC-------------------------------------   
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -255,20 +256,20 @@ class ProductoListView(ListView):
     context_object_name = "PRODUCTOS"
 
 
-class ProductoDetailView(DetailView):
+class ProductoDetailView(LoginRequiredMixin , DetailView):
     model = Producto
     template_name = "pedidos/vbc/detail-producto.html"
     context_object_name = "producto"
 
 
-class ProductoCreateView(CreateView):
+class ProductoCreateView(LoginRequiredMixin , CreateView):
     model = Producto
     template_name = "pedidos/vbc/form-create-producto.html"
     fields = ["nombre", "disponible", "rendimiento", "tipo"]
     success_url = reverse_lazy("vbc_producto_list")
 
 
-class ProductoUpdateView(UpdateView):
+class ProductoUpdateView(LoginRequiredMixin , UpdateView):
     model = Producto
     template_name = "pedidos/vbc/form-create-producto.html"
     fields = ["nombre", "disponible", "rendimiento", "tipo"]
@@ -276,7 +277,7 @@ class ProductoUpdateView(UpdateView):
     success_url = reverse_lazy("vbc_producto_list")
 
 
-class ProductoDeleteView(DeleteView):
+class ProductoDeleteView(LoginRequiredMixin , DeleteView):
     model = Producto
     template_name = "pedidos/vbc/producto_confirm_delete.html"
     success_url = reverse_lazy("vbc_producto_list")
@@ -290,20 +291,20 @@ class PackagingListView(ListView):
     context_object_name = "PACKAGING"
 
 
-class PackagingDetailView(DetailView):
+class PackagingDetailView(LoginRequiredMixin , DetailView):
     model = Packaging
     template_name = "pedidos/vbc/detail-packaging.html"
     context_object_name = "producto"
 
 
-class PackagingCreateView(CreateView):
+class PackagingCreateView(LoginRequiredMixin , CreateView):
     model = Packaging
     template_name = "pedidos/vbc/form-create-packaging.html"
     fields = ["nombre", "disponible", "descripcion", "etiqueta"]
     success_url = reverse_lazy("vbc_packaging_list")
 
 
-class PackagingUpdateView(UpdateView):
+class PackagingUpdateView(LoginRequiredMixin , UpdateView):
     model = Packaging
     template_name = "pedidos/vbc/form-create-packaging.html"
     fields = ["nombre", "disponible", "descripcion", "etiqueta"]
@@ -311,7 +312,7 @@ class PackagingUpdateView(UpdateView):
     success_url = reverse_lazy("vbc_packaging_list")
 
 
-class PackagingDeleteView(DeleteView):
+class PackagingDeleteView(LoginRequiredMixin , DeleteView):
     model = Packaging
     template_name = "pedidos/vbc/packaging_confirm_delete.html"
     success_url = reverse_lazy("vbc_packaging_list")
@@ -359,4 +360,17 @@ from django.contrib.auth import logout
 
 def user_logout_view(request):
     logout(request)
-    return redirect("login")
+    return redirect("home")
+
+
+from django.contrib.auth.models import User
+from .forms import UserEditForm
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = UserEditForm
+    template_name = 'pedidos/user_edit_form.html'
+    success_url = reverse_lazy('home')
+
+    def get_object(self):
+        return self.request.user

@@ -31,6 +31,7 @@ from .views import (
     user_login_view,
     user_creation_view,
     user_logout_view,
+    UserUpdateView,
 )
 
 urlpatterns = [
@@ -65,4 +66,5 @@ urlpatterns = [
     path("crear-usuario/", user_creation_view, name="crear-usuario"),
     path("login/", user_login_view, name="login"),
     path("logout/", user_logout_view, name="logout"),
+    path('editar-perfil/', UserUpdateView.as_view(), name='editar-perfil'),
 ]
