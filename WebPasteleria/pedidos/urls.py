@@ -32,10 +32,12 @@ from .views import (
     user_creation_view,
     user_logout_view,
     UserUpdateView,
+    acerca_de_mi,
 )
 
 urlpatterns = [
     path("", home_view, name="home"),
+    path("about/", acerca_de_mi, name="about"),
     path("list/", list_view, name="pedidos-list"),
     path("detail/<pedido_id>", detail_pedidos_view,name="pedido-detail"),
     path("buscar/<nombre_de_usuario>", search_view),
