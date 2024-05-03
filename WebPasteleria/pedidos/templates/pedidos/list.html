@@ -33,9 +33,9 @@
                     <td>{{ pedido.hora }}</td>
                     <td>{{ pedido.descripcion }}</td>
                     <td>
-                        <a href="/pedidos/detail/{{ pedido.id }}" class="btn btn-primary btn-sm">Editar</a>
-                        <a href="/pedidos/detail/{{ pedidoa.id }}" class="btn btn-primary btn-sm">Eliminar</a>
-                        <a href="/pedidos/detail/{{ pedido.id }}" class="btn btn-primary btn-sm">Ver</a>
+                        <a href="{% url 'pedido-update' pedido.id %}" class="btn btn-primary btn-sm">Editar</a>
+                        <a href="{% url 'pedido-delete' pedido.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                        <a href="{% url 'pedido-detail' pedido.id %}" class="btn btn-primary btn-sm">Ver</a>
                     </td>
                 </tr>
                 {% endfor %}

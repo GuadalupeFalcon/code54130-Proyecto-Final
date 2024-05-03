@@ -3,13 +3,16 @@ from .models import Pedido, Producto , Packaging
 from django.http import HttpResponse
 from .forms import PedidoSearchForm , ProductoCreateForm , PedidoCreateForm , ProductoSearchForm
 from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
 def home_view(request):
     return render (request, "pedidos/home.html")
 
-
+@login_required
 def list_view(request):
     pedidos = Pedido.objects.all()
     contexto_dict = {"pedidos": pedidos}
@@ -54,6 +57,39 @@ def search_with_form_view(request):
             contexto_dict = {"pedidos": pedidos_del_usuario}
             return render(request, "pedidos/list.html", contexto_dict)
 
+def pedido_update_view(request, pedido_id):
+    pedido_a_editar = Pedido.objects.filter(id=pedido_id).first()
+    if request.method == "GET":
+        valores_iniciales = {
+            "nombre_de_usuario": pedido_a_editar.nombre_de_usuario,
+            "producto": pedido_a_editar.producto,
+            "fecha": pedido_a_editar.fecha,
+            "hora": pedido_a_editar.hora,
+            "descripcion": pedido_a_editar.descripcion,
+        }
+        formulario = PedidoCreateForm(initial=valores_iniciales)
+        contexto = {"form_pedido_update": formulario, "OBJETO": pedido_a_editar}
+        return render(request, "pedidos/form-pedido-update.html", contexto)
+    elif request.method == "POST":
+        form = PedidoCreateForm(request.POST)
+        if form.is_valid():
+            nombre_de_usuario = form.cleaned_data["nombre_de_usuario"]
+            producto = form.cleaned_data["producto"]
+            fecha = form.cleaned_data["fecha"]
+            hora = form.cleaned_data["hora"]
+            descripcion = form.cleaned_data["descripcion"]
+            pedido_a_editar.nombre_de_usuario = nombre_de_usuario
+            pedido_a_editar.producto = producto
+            pedido_a_editar.fecha = fecha
+            pedido_a_editar.hora = hora
+            pedido_a_editar.descripcion = descripcion
+            pedido_a_editar.save()
+            return redirect("pedido-detail", pedido_a_editar.id)
+        
+def delete_pedido_view(request, pedido_id):
+    pedido_a_borrar = Pedido.objects.filter(id=pedido_id).first()
+    pedido_a_borrar.delete()
+    return redirect("pedidos-list")
 
 #def create_producto_with_form_view(request):
 #    contexto = {"create-form": ProductoCreateForm() }
@@ -80,6 +116,8 @@ def search_with_form_view(request):
 #            nuevo_producto.save()
 #            return detail_producto_view(request, nuevo_producto.id)
 
+
+@login_required
 def create_producto_with_form_view(request):
     if request.method == "GET":
         contexto = {"create_form_producto": ProductoCreateForm()}
@@ -199,6 +237,7 @@ def create_pedido_with_form_view(request):
             nuevo_pedido.save()
             return detail_pedidos_view(request, nuevo_pedido.id)
         
+#Producto VBC-------------------------------------   
 
 from django.urls import reverse_lazy
 from django.views.generic import (
@@ -243,7 +282,7 @@ class ProductoDeleteView(DeleteView):
     success_url = reverse_lazy("vbc_producto_list")
 
 
-#-------------------------------------   
+#Packaging VBC-------------------------------------   
 
 class PackagingListView(ListView):
     model = Packaging
@@ -276,3 +315,48 @@ class PackagingDeleteView(DeleteView):
     model = Packaging
     template_name = "pedidos/vbc/packaging_confirm_delete.html"
     success_url = reverse_lazy("vbc_packaging_list")
+
+
+
+#logIn / LogOut ------------------------------------- 
+
+
+
+
+def user_login_view(request):
+    if request.method == "GET":
+        form = AuthenticationForm()
+    elif request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+
+        if form.is_valid():
+            user = form.user_cache
+            if user is not None:
+                login(request, user)
+                return redirect("home")
+
+    return render(request, "pedidos/login.html", {"form": form})
+
+
+from django.contrib.auth.forms import UserCreationForm
+
+
+def user_creation_view(request):
+    if request.method == "GET":
+        form = UserCreationForm()
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("home")
+
+    return render(request, "pedidos/crear_usuario.html", {"form": form})
+
+
+from django.contrib.auth import logout
+
+
+def user_logout_view(request):
+    logout(request)
+    return redirect("login")

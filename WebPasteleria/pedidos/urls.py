@@ -5,7 +5,9 @@ from .views import (
     search_view,
     create_view,
     detail_pedidos_view,
+    delete_pedido_view,
     search_with_form_view,
+    pedido_update_view,
     create_producto_with_form_view,
     detail_producto_view,
     producto_list_view,
@@ -25,32 +27,42 @@ from .views import (
     PackagingCreateView,
     PackagingUpdateView,
     PackagingDeleteView,
+    #LogIn / LogOut
+    user_login_view,
+    user_creation_view,
+    user_logout_view,
 )
 
 urlpatterns = [
-    path("", home_view),
+    path("", home_view, name="home"),
     path("list/", list_view, name="pedidos-list"),
-    path("detail/<pedido_id>", detail_pedidos_view),
+    path("detail/<pedido_id>", detail_pedidos_view,name="pedido-detail"),
     path("buscar/<nombre_de_usuario>", search_view),
     path("crear/<nombre_de_usuario>/<producto>", create_view),
     path("buscar-con-formulario/", search_with_form_view, name="buscar-con-formulario"),
     path("crear-pedido-con-formulario/", create_pedido_with_form_view, name="crear-pedido-con-formulario"),
+    path("update/<pedido_id>", pedido_update_view, name="pedido-update"),
+    path("delete/<pedido_id>", delete_pedido_view, name="pedido-delete"),
     path("crear-producto-con-formulario/", create_producto_with_form_view, name="crear-producto-con-formulario"),
     path("detail-producto/<producto_id>", detail_producto_view, name="producto-detail"),
     path("producto/list/", producto_list_view, name="productos-list"),
     path("producto/delete/<producto_id>", delete_producto_view, name="producto-delete"),
     path("producto/update/<producto_id>", producto_update_view, name="producto-update"),
     path("producto/buscar/", search_producto_view, name="producto-search"),
-       # Vistas basadas en clases "VBC" Producto
+    # Vistas basadas en clases "VBC" Producto
     path("producto/vbc/list", ProductoListView.as_view(), name="vbc_producto_list"),
     path("producto/vbc/create/", ProductoCreateView.as_view(), name="vbc_producto_create"),
     path("producto/vbc/<int:pk>/detail", ProductoDetailView.as_view(), name="vbc_producto_detail"),
     path("producto/vbc/<int:pk>/update/", ProductoUpdateView.as_view(), name="vbc_producto_update"),
     path("producto/vbc/<int:pk>/delete/", ProductoDeleteView.as_view(), name="vbc_producto_delete"),
-           # Vistas basadas en clases "VBC" Packaging
+    # Vistas basadas en clases "VBC" Packaging
     path("packaging/vbc/packaging-list", PackagingListView.as_view(), name="vbc_packaging_list"),
     path("packaging/vbc/create/", PackagingCreateView.as_view(), name="vbc_packaging_create"),
     path("packaging/vbc/<int:pk>/detail", PackagingDetailView.as_view(), name="vbc_packaging_detail"),
     path("packaging/vbc/<int:pk>/update/", PackagingUpdateView.as_view(), name="vbc_packaging_update"),
     path("packaging/vbc/<int:pk>/delete/", PackagingDeleteView.as_view(), name="vbc_packaging_delete"),
+    # loguin / logout
+    path("crear-usuario/", user_creation_view, name="crear-usuario"),
+    path("login/", user_login_view, name="login"),
+    path("logout/", user_logout_view, name="logout"),
 ]
