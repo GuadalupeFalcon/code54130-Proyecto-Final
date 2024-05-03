@@ -16,9 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path , include
-
 from django.http import HttpResponse
-
+from django.views.generic.base import RedirectView
 
 def mi_view(request):
     return HttpResponse("<h1>Lupe Mesas Dulces, Bienvenidos a nuestra Web</h1>")
@@ -27,4 +26,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("", mi_view),
     path("pedidos/", include("pedidos.urls")),
+    path("", RedirectView.as_view(url="/pedidos/", permanent=True)),
 ]
+
+# Avatar------------------------------------------------------------------------
+from django.conf.urls.static import static
+from django.conf import settings
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

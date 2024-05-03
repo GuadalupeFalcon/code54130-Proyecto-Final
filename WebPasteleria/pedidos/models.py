@@ -3,6 +3,14 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
+class Avatar(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='avatar')
+    image = models.ImageField(upload_to='avatars/')
+
+    def __str__(self):
+        return f"Avatar for {self.user.username}"
+
+
 # Create your models here.
 
 class Producto(models.Model):

@@ -33,6 +33,7 @@ from .views import (
     user_logout_view,
     UserUpdateView,
     acerca_de_mi,
+    avatar_view,
 )
 
 urlpatterns = [
@@ -69,4 +70,6 @@ urlpatterns = [
     path("login/", user_login_view, name="login"),
     path("logout/", user_logout_view, name="logout"),
     path('editar-perfil/', UserUpdateView.as_view(), name='editar-perfil'),
+    #Avatar
+    path('avatar/add/', avatar_view, name='avatar_add'),
 ]

@@ -374,3 +374,26 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self):
         return self.request.user
+    
+
+from .models import Avatar
+from .forms import AvatarCreateForm
+
+
+def avatar_view(request):
+    if request.method == "GET":
+        contexto = {"KEY": AvatarCreateForm()}
+    else:
+        form = AvatarCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.cleaned_data["image"]
+            avatar_existente = Avatar.objects.filter(user=request.user)
+            avatar_existente.delete()
+            nuevo_avatar = Avatar(image=image, user=request.user)
+            nuevo_avatar.save()
+            return redirect("home")
+        else:
+            contexto = {"KEY": form}
+
+
+    return render(request, "pedidos/avatar_create.html", context=contexto)

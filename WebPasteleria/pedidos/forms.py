@@ -1,6 +1,6 @@
 from django import forms
-
 from .models import Producto , Pedido
+from .models import Avatar
 
 class ProductoSearchForm(forms.Form):
     nombre= forms.CharField(
@@ -42,3 +42,9 @@ class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email']
+
+
+class AvatarCreateForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ['image']
